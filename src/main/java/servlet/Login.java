@@ -71,6 +71,8 @@ public class Login extends HttpServlet {
 			// if not, we query from table "user" to check user&pass
 			String sql;
 			sql = "SELECT * FROM user WHERE username = '" + username + "' AND password = '" + password + "'; ";
+			// if sqlagent don't connected
+			if (!sqla.isConnected()) sqla.openConnection();
 			// get result
 			ResultSet res = sqla.executeQuery(sql);
 			if (res.next()) {
@@ -84,6 +86,8 @@ public class Login extends HttpServlet {
 				session.setAttribute("authed", "no");
 				response.sendRedirect("Login.jsp?failed=1");
 			}
+			// close res
+			res.close();
 		}
 		catch (SQLException e) {
 			out.print("Error in SQL! " + e);
