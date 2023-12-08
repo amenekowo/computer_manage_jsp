@@ -91,9 +91,6 @@ public class Login extends HttpServlet {
 		catch (Exception e) {
 			out.print("System error! " + e);
 		}
-		finally {
-			response.sendRedirect("Login.jsp?failed=1");
-		}
 		
 	}
 
