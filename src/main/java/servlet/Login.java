@@ -49,24 +49,6 @@ public class Login extends HttpServlet {
 		}
 		
 		try {
-			// if we don't get an agent for sql, create it
-			if (session.getAttribute("SqlAgent") == null) {
-				// mysql params, change these to yours.
-				// don't forget to create db and grant permission!
-				String sql_url = "jdbc:mysql://localhost:3306/jspdemo";
-				String sql_user = "demo";
-				String sql_pass = "demo123!@#";
-				try {
-					SqlAgent sqla = new SqlAgent(sql_url, sql_user, sql_pass);
-					session.setAttribute("SqlAgent", sqla);
-				}
-				catch (ClassNotFoundException e) {
-					out.print("Error in loading SQL connector!");
-				}
-				catch (SQLException e) {
-					out.print("Error in loading SQL agent!");
-				}
-			}
 			// get our agent
 			SqlAgent sqla = (SqlAgent) session.getAttribute("SqlAgent");
 			// we query from table "user" to check user&pass
