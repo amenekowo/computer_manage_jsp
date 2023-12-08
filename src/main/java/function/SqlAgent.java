@@ -9,6 +9,7 @@ public class SqlAgent {
 	String url = null;
 	String user = null;
 	String pass = null;
+	boolean connected = false;
 	
 	public SqlAgent (String url, String user, String pass) throws ClassNotFoundException, SQLException {
 		// load mysql connector
@@ -16,15 +17,13 @@ public class SqlAgent {
 		// save parameters
 		this.url = url; this.user = user; this.pass = pass;
 		// try connecting
-		conn = DriverManager.getConnection(url, user, pass);
+		this.openConnection();
 	}
 	
 	public ResultSet executeQuery (String sql) throws SQLException{
 		// get statement
 		stat = conn.createStatement();
 		res = stat.executeQuery(sql);
-		// DON'T FORGET TO CLOSE!!!!!!
-		stat.close();
 		return res;
 	}
 	
@@ -32,7 +31,6 @@ public class SqlAgent {
 		// same as query, but we return updated items count
 		stat = conn.createStatement();
 		int status = stat.executeUpdate(sql);
-		stat.close();
 		return status;
 	}
 	
@@ -46,5 +44,25 @@ public class SqlAgent {
 	public void closeConnection () throws SQLException {
 		conn.close();
 		conn = null;
+	}
+	
+	public boolean isConnected () {
+		return connected;
+	}
+	
+	public void destroy () throws SQLException {
+		// close everything
+		if (res != null) {
+			res.close();
+			res = null;
+		}
+		if (stat != null) {
+			stat.close();
+			stat = null;
+		}
+		if (conn != null) {
+			conn.close();
+			conn = null;
+		}
 	}
 }
