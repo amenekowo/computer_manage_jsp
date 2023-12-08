@@ -29,6 +29,7 @@ public class SqlAgent {
 	}
 	
 	public int executeUpdate (String sql) throws SQLException {
+		// same as query, but we return updated items count
 		stat = conn.createStatement();
 		int status = stat.executeUpdate(sql);
 		stat.close();
@@ -44,5 +45,6 @@ public class SqlAgent {
 	
 	public void closeConnection () throws SQLException {
 		conn.close();
+		conn = null;
 	}
 }
