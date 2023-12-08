@@ -7,6 +7,9 @@
 <title>Main Application</title>
 </head>
 <body>
+
+<h1>欢迎来到电脑管理系统！</h1>
+<h2>请选择您的操作：</h2>
 <%
 // checked user is authed or not
 String authed = (String)session.getAttribute("authed");

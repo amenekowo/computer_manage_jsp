@@ -11,36 +11,31 @@ public class SqlAgent {
 	String pass = null;
 	
 	public SqlAgent (String url, String user, String pass) throws ClassNotFoundException, SQLException {
+		// load mysql connector
+		Class.forName("com.mysql.cj.jdbc.Driver");
 		// save parameters
 		this.url = url; this.user = user; this.pass = pass;
-		// try connecting
-		this.openConnection();
 	}
 	
 	public ResultSet executeQuery (String sql) throws SQLException{
+		// get connection
+		conn = DriverManager.getConnection(url, user, pass);
 		// get statement
 		stat = conn.createStatement();
+		// execute query
 		res = stat.executeQuery(sql);
 		return res;
 	}
 	
 	public int executeUpdate (String sql) throws SQLException {
+		// get connection
+		conn = DriverManager.getConnection(url, user, pass);
+		// get statement
+		stat = conn.createStatement();
 		// same as query, but we return updated items count
 		stat = conn.createStatement();
 		int status = stat.executeUpdate(sql);
 		return status;
-	}
-	
-	public void openConnection () throws ClassNotFoundException, SQLException {
-		// load mysql connector
-		Class.forName("com.mysql.cj.jdbc.Driver");
-		// get connection
-		conn = DriverManager.getConnection(url, user, pass);
-	}
-	
-	public void closeConnection () throws SQLException {
-		conn.close();
-		conn = null;
 	}
 	
 	public void destroy () throws SQLException {

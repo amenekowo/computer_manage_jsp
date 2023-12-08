@@ -51,7 +51,7 @@
     	if (request.getParameter("empty").equals("1")) out.print("用户名或密码不能为空，请重试！");
     }
     if (request.getParameter("regnew") != null) {
-    	if (request.getParameter("empty").equals("1")) out.print("注册成功！请登录");
+    	if (request.getParameter("regnew").equals("1")) out.print("注册成功！请登录");
     }
     
     %>
