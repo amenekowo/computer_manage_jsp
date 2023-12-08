@@ -25,12 +25,20 @@ public class SqlAgent {
 	public ResultSet executeQuery (String sql) throws SQLException{
 		// get statement
 		stat = conn.createStatement();
-		return stat.executeQuery(sql);
+		res = stat.executeQuery(sql);
+		// DON'T FORGET TO CLOSE!!!!!!
+		stat.close();
+		return res;
 	}
 	
 	public int executeUpdate (String sql) throws SQLException {
 		stat = conn.createStatement();
-		return stat.executeUpdate(sql);
+		int status = stat.executeUpdate(sql);
+		stat.close();
+		return status;
 	}
 	
+	public void closeConnection () throws SQLException {
+		conn.close();
+	}
 }
