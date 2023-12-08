@@ -40,6 +40,14 @@ public class Login extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		
+		// now we get params from request
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		// if we get empty in user/pass or some absurd occasion when they are null, go back to login page
+		if (username.length() == 0 || password.length() == 0 || username == null || password == null) {
+			response.sendRedirect("Login.jsp?empty=1");
+		}
+		
 		try {
 			// if we don't get an agent for sql, create it
 			if (session.getAttribute("SqlAgent") == null) {
@@ -61,14 +69,7 @@ public class Login extends HttpServlet {
 			}
 			// get our agent
 			SqlAgent sqla = (SqlAgent) session.getAttribute("SqlAgent");
-			// now we get params from request
-			String username = request.getParameter("username");
-			String password = request.getParameter("password");
-			// if we get empty in user/pass or some absurd occasion when they are null, go back to login page
-			if (username.length() == 0 || password.length() == 0 || username == null || password == null) {
-				response.sendRedirect("Login.jsp?empty=1");
-			}
-			// if not, we query from table "user" to check user&pass
+			// we query from table "user" to check user&pass
 			String sql;
 			sql = "SELECT * FROM user WHERE username = '" + username + "' AND password = '" + password + "'; ";
 			// if sqlagent don't connected
@@ -86,7 +87,7 @@ public class Login extends HttpServlet {
 				session.setAttribute("authed", "no");
 				response.sendRedirect("Login.jsp?failed=1");
 			}
-			// close res
+			// !!! don't forget to close res !!!
 			res.close();
 		}
 		catch (SQLException e) {
