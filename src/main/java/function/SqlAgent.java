@@ -20,15 +20,16 @@ public class SqlAgent {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		// try connecting
 		conn = DriverManager.getConnection(url, user, pass);
-		// get statement
-		stat = conn.createStatement();
 	}
 	
 	public ResultSet executeQuery (String sql) throws SQLException{
+		// get statement
+		stat = conn.createStatement();
 		return stat.executeQuery(sql);
 	}
 	
 	public int executeUpdate (String sql) throws SQLException {
+		stat = conn.createStatement();
 		return stat.executeUpdate(sql);
 	}
 	
