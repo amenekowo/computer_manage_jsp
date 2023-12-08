@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,15 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import function.SqlAgent;
+
 /**
  * Servlet implementation class Login
  */
 @WebServlet("/Login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	Connection conn = null;
-	Statement stat = null;
-	ResultSet res = null;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -43,17 +41,26 @@ public class Login extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		
 		try {
-			// load mysql connector
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			// mysql params, change these to yours.
-			// don't forget to create db and grant permission!
-			String sql_url = "jdbc:mysql://localhost:3306/jspdemo";
-			String sql_user = "demo";
-			String sql_pass = "demo123!@#";
-			// try connecting
-			conn = DriverManager.getConnection(sql_url, sql_user, sql_pass);
-			// get statement
-			stat = conn.createStatement();
+			// if we don't get an agent for sql, create it
+			if (session.getAttribute("SqlAgent") == null) {
+				// mysql params, change these to yours.
+				// don't forget to create db and grant permission!
+				String sql_url = "jdbc:mysql://localhost:3306/jspdemo";
+				String sql_user = "demo";
+				String sql_pass = "demo123!@#";
+				try {
+					SqlAgent sqla = new SqlAgent(sql_url, sql_user, sql_pass);
+					session.setAttribute("SqlAgent", sqla);
+				}
+				catch (ClassNotFoundException e) {
+					out.print("Error in loading SQL connector!");
+				}
+				catch (SQLException e) {
+					out.print("Error in loading SQL agent!");
+				}
+			}
+			// get our agent
+			SqlAgent sqla = (SqlAgent) session.getAttribute("SqlAgent");
 			// now we get params from request
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
@@ -65,20 +72,18 @@ public class Login extends HttpServlet {
 			String sql;
 			sql = "SELECT * FROM user WHERE username = '" + username + "' AND password = '" + password + "'; ";
 			// get result
-			res = stat.executeQuery(sql);
+			ResultSet res = sqla.executeQuery(sql);
 			if (res.next()) {
 				// set login success flag
-				session.setAttribute("logged", true);
+				session.setAttribute("authed", "yes");
 				// forward user to main page
 				response.sendRedirect("Main.jsp");
 			}
 			// if not, we give user a attention
 			else {
+				session.setAttribute("authed", "no");
 				response.sendRedirect("Login.jsp?failed=1");
 			}
-		}
-		catch (ClassNotFoundException e) {
-			out.print("Error in loading SQL connector! " + e);
 		}
 		catch (SQLException e) {
 			out.print("Error in SQL! " + e);
@@ -87,7 +92,7 @@ public class Login extends HttpServlet {
 			out.print("System error! " + e);
 		}
 		finally {
-			
+			response.sendRedirect("Login.jsp?failed=1");
 		}
 		
 	}
