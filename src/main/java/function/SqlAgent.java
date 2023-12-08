@@ -12,8 +12,6 @@ public class SqlAgent {
 	boolean connected = false;
 	
 	public SqlAgent (String url, String user, String pass) throws ClassNotFoundException, SQLException {
-		// load mysql connector
-		Class.forName("com.mysql.cj.jdbc.Driver");
 		// save parameters
 		this.url = url; this.user = user; this.pass = pass;
 		// try connecting
