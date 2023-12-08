@@ -72,8 +72,6 @@ public class Login extends HttpServlet {
 			// we query from table "user" to check user&pass
 			String sql;
 			sql = "SELECT * FROM user WHERE username = '" + username + "' AND password = '" + password + "'; ";
-			// if sqlagent don't connected
-			if (!sqla.isConnected()) sqla.openConnection();
 			// get result
 			ResultSet res = sqla.executeQuery(sql);
 			if (res.next()) {

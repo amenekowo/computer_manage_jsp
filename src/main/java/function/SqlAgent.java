@@ -9,14 +9,12 @@ public class SqlAgent {
 	String url = null;
 	String user = null;
 	String pass = null;
-	boolean connected = false;
 	
 	public SqlAgent (String url, String user, String pass) throws ClassNotFoundException, SQLException {
 		// save parameters
 		this.url = url; this.user = user; this.pass = pass;
 		// try connecting
 		this.openConnection();
-		connected = true;
 	}
 	
 	public ResultSet executeQuery (String sql) throws SQLException{
@@ -43,11 +41,6 @@ public class SqlAgent {
 	public void closeConnection () throws SQLException {
 		conn.close();
 		conn = null;
-		connected = false;
-	}
-	
-	public boolean isConnected () {
-		return connected;
 	}
 	
 	public void destroy () throws SQLException {
@@ -64,6 +57,5 @@ public class SqlAgent {
 			conn.close();
 			conn = null;
 		}
-		connected = false;
 	}
 }
