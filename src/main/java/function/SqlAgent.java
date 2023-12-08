@@ -16,6 +16,7 @@ public class SqlAgent {
 		this.url = url; this.user = user; this.pass = pass;
 		// try connecting
 		this.openConnection();
+		connected = true;
 	}
 	
 	public ResultSet executeQuery (String sql) throws SQLException{
@@ -42,6 +43,7 @@ public class SqlAgent {
 	public void closeConnection () throws SQLException {
 		conn.close();
 		conn = null;
+		connected = false;
 	}
 	
 	public boolean isConnected () {
@@ -62,5 +64,6 @@ public class SqlAgent {
 			conn.close();
 			conn = null;
 		}
+		connected = false;
 	}
 }
