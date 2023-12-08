@@ -16,5 +16,9 @@ if (authed == null || authed == "no") {
 }
 
 %>
+
+<form action="logout">
+<input type="submit" value="退出登录" />
+</form>
 </body>
 </html>
