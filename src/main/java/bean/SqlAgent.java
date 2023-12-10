@@ -1,4 +1,4 @@
-package function;
+package bean;
 
 import java.sql.*;
 

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import function.SqlAgent;
+import bean.SqlAgent;
 
 @WebServlet("/Register")
 public class Register extends HttpServlet {
