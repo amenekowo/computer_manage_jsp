@@ -2,6 +2,7 @@ package bean;
 
 public class UserParams {
 	String username, password;
+	boolean isAdmin;
 	
 	String getUsername () {
 		return this.username;
