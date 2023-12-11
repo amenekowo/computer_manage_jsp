@@ -12,19 +12,19 @@
 User user = (User)session.getAttribute("user");
 if (user == null) {
 	out.print("登录超时，请重新登录！");
-	out.print("<br><form action=\"Login.jsp\" method=\"post\"><input type=\"submit\" value=\"返回登录\" /></form>");
+	out.print("<br><a href=\"logout\"> <button>返回登录</button> </a>");
 }
 else {
 	if (user.getAdmin()) {
 		out.print("<h1>欢迎来到计算机维修任务管理系统！</h1> <h2>请选择您的操作：</h2>");
-		out.print("<form action=\"AdminMission.jsp\"><input type=\"submit\" value=\"管理任务\" /></form>");
-		out.print("<form action=\"AdminUser.jsp\"><input type=\"submit\" value=\"管理用户\" /></form>");
+		out.print("<a href=\"AdminTask.jsp\"> <button>管理任务</button> </a>");
+		out.print("<a href=\"AdminUser.jsp\"> <button>管理用户</button> </a>");
 	}
 	else {
 		out.print("你还不是管理员！");
 	}
-	out.print("<form action=\"Main.jsp\"><input type=\"submit\" value=\"返回\" /></form>");
-	out.print("<form action=\"logout\"><input type=\"submit\" value=\"退出登录\" /></form>");
+	out.print("<a href=\"Main.jsp\"> <button>返回</button> </a>");
+	out.print("<a href=\"logout\"> <button>退出登录</button> </a>");
 }
 
 

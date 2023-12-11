@@ -13,17 +13,17 @@ User user = (User)session.getAttribute("user");
 
 if (user == null) {
 	out.print("登录超时，请重新登录！");
-	out.print("<br><form action=\"Login.jsp\" method=\"post\"><input type=\"submit\" value=\"返回登录\" /></form>");
+	out.print("<br><a href=\"logout\"> <button>返回登录</button> </a>");
 }
 else {
 	out.print("<h1>欢迎来到计算机维修任务管理系统！</h1> <h2>请选择您的操作：</h2>");
 	if (user.getAdmin()) {
-		out.print("<form action=\"Admin.jsp\"><input type=\"submit\" value=\"管理员界面\" /></form>");
+		out.print("<a href=\"Admin.jsp\"> <button>管理员界面</button> </a>");
 	}
 	else {
-		out.print("<form action=\"logout\"><input type=\"submit\" value=\"查看任务\" /></form>");
+		out.print("<a href=\"Task.jsp\"> <button>查看任务</button> </a>");
 	}
-	out.print("<form action=\"logout\"><input type=\"submit\" value=\"退出登录\" /></form>");
+	out.print("<a href=\"logout\"> <button>退出登录</button> </a>");
 }
 
 %>
