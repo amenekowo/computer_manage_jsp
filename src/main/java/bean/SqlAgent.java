@@ -83,6 +83,9 @@ public class SqlAgent {
 				res.close();
 			}
 		}
+		else {
+			user = null;
+		}
 		sqla.destroy();
 		return user;
 	}
@@ -111,4 +114,29 @@ public class SqlAgent {
 		sqla.destroy();
 		return errcode;
 	}
+	
+	public int setTask (String taskname, String user) throws ClassNotFoundException, SQLException {
+		SqlAgent sqla = new SqlAgent();
+		String sql;
+		int status, errcode;
+		// check dup
+		sql = "SELECT * FROM task WHERE taskname = '" + taskname + "';";
+		ResultSet res = sqla.executeQuery(sql);
+		if (res.next()) {
+			errcode = 1;
+		}
+		else {
+			sql = "INSERT INTO task (taskname, user) VALUES ('" + taskname + "', '"+ user + "'); ";
+			status = sqla.executeUpdate(sql);
+			if (status == 1) {
+				errcode = 0;
+			}
+			else {
+				errcode = 2;
+			}
+		}
+		sqla.destroy();
+		return errcode;
+	}
+	
 }

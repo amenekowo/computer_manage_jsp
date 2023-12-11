@@ -23,6 +23,14 @@
     <servlet-name>RegisterServlet</servlet-name>
     <servlet-class>servlet.Register</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>TaskSearch</servlet-name>
+    <servlet-class>servlet.TaskSearch</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>UserAdmin</servlet-name>
+    <servlet-class>servlet.UpdateUser</servlet-class>
+  </servlet>
   
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
@@ -35,6 +43,14 @@
   <servlet-mapping>
     <servlet-name>RegisterServlet</servlet-name>
     <url-pattern>/register</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>TaskSearch</servlet-name>
+    <url-pattern>/checktask</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UserAdmin</servlet-name>
+    <url-pattern>/usermod</url-pattern>
   </servlet-mapping>
   
 </web-app>
