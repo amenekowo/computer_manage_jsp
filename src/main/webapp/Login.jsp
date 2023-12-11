@@ -29,21 +29,7 @@
     <%
     // move sqlagent init to login.jsp to avoid everytime reuse of it
     if (session.getAttribute("SqlAgent") == null) {
-		// mysql params, change these to yours.
-		// don't forget to create db and grant permission!
-		String sql_url = "jdbc:mysql://localhost:3306/jspdemo";
-		String sql_user = "demo";
-		String sql_pass = "demo123!@#";
-		try {
-			SqlAgent sqla = new SqlAgent(sql_url, sql_user, sql_pass);
-			session.setAttribute("SqlAgent", sqla);
-		}
-		catch (ClassNotFoundException e) {
-			out.print("Error in loading SQL connector!");
-		}
-		catch (SQLException e) {
-			out.print("Error in loading SQL agent!");
-		}
+		
 	}
     if (request.getParameter("failed") != null) {
     	if (request.getParameter("failed").equals("1")) out.print("用户名或密码输入错误，请重试！");

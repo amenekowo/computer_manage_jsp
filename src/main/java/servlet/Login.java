@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bean.SqlAgent;
+import bean.User;
 
 /**
  * Servlet implementation class Login
@@ -52,38 +53,18 @@ public class Login extends HttpServlet {
 		}
 		
 		try {
-			// get our agent
-			SqlAgent sqla = (SqlAgent) session.getAttribute("SqlAgent");
-			// we query from table "user" to check user&pass
-			String sql;
-			sql = "SELECT * FROM user WHERE username = '" + username + "' AND password = '" + password + "'; ";
-			// get result
-			ResultSet res = sqla.executeQuery(sql);
-			if (res.next()) {
-				// set login success flag
-				session.setAttribute("authed", "yes");
-				res.close();
-				sql = "SELECT * FROM user WHERE username = '" + username + "' AND password = '" + password + "' AND isadmin = '1'; ";
-				res = sqla.executeQuery(sql);
-				if (res.next()) {
-					session.setAttribute("isAdmin", "yes");
-				}
-				// forward user to main page
-				response.sendRedirect("Main.jsp");
-			}
-			// if not, we give user a attention
-			else {
-				session.setAttribute("authed", "no");
+			SqlAgent sqla = new SqlAgent();
+			User user = sqla.login(username, password);
+			if (user == null) {
 				response.sendRedirect("Login.jsp?failed=1");
 			}
-			// !!! don't forget to close res !!!
-			res.close();
-		}
-		catch (SQLException e) {
-			out.print("Error in SQL! " + e);
+			else {
+				response.sendRedirect("Main.jsp");
+				session.setAttribute("user", user);
+			}
 		}
 		catch (Exception e) {
-			out.print("System error! " + e);
+			response.sendRedirect("Error.jsp?err=" + e.toString());
 		}
 		
 	}
