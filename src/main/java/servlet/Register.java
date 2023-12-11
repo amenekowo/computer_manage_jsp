@@ -43,33 +43,18 @@ public class Register extends HttpServlet {
 			return;
 		}
 		
-		// get sql agent
-		SqlAgent sqla = (SqlAgent)session.getAttribute("SqlAgent");
-		// register sql
-		String sql;
 		try {
-			int status;
-			// check username exists
-			sql = "SELECT * FROM user WHERE username = '" + username + "';";
-			ResultSet res = sqla.executeQuery(sql);
-			// if we got an account
-			if (res.next()) {
-				response.sendRedirect("Register.jsp?failed=2");
+			SqlAgent sqla = new SqlAgent();
+			int stat = sqla.register(username, password);
+			if (stat == 0) {
+				response.sendRedirect("Login.jsp?regnew=1");
 			}
-			else {
-				sql = "INSERT INTO user (username, password) VALUES ('" + username + "', '"+ password + "'); ";
-				out.print("<br>" + sql);
-				status = sqla.executeUpdate(sql);
-				if (status == 1) {
-					response.sendRedirect("Login.jsp?regnew=1");
-				}
-				else {
-					response.sendRedirect("Register.jsp?failed=1");
-				}
+			else if (stat == 1) {
+				response.sendRedirect("Register.jsp?failed=1");
 			}
 		}
-		catch (SQLException e) {
-			out.print("系统错误，请联系管理员并提供以下报错信息！\n" + e.toString());
+		catch (Exception e) {
+			response.sendRedirect("Error.jsp?err=" + e.toString());
 		}
 	}
 

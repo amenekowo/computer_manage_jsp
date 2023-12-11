@@ -28,10 +28,8 @@
     </form>	
      <%
      // if sqlagent is null, go back to login.jsp to create one
-     if (session.getAttribute("SqlAgent") == null) {request.getRequestDispatcher("Login.jsp").forward(request, response);}
      if (request.getParameter("failed") != null) {
-     	if (request.getParameter("failed").equals("1")) out.print("系统错误，请联系管理员并提供以下报错信息！ " + request.getParameter("err").toString());
-     	if (request.getParameter("failed").equals("2")) out.print("用户名已存在！");
+      	if (request.getParameter("failed").equals("1")) out.print("用户名已存在！");
      }
     if (request.getParameter("empty") != null) {
     	if (request.getParameter("empty").equals("1")) out.print("用户名或密码不能为空，请重试！");

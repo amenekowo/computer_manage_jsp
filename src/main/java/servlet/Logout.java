@@ -22,15 +22,6 @@ public class Logout extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		if (session.getAttribute("SqlAgent") != null) {
-			SqlAgent sqla = (SqlAgent)session.getAttribute("SqlAgent");
-			try {
-				sqla.destroy();
-			}
-			catch (SQLException e) {
-				response.sendRedirect("Error.jsp?err=" + e.toString());
-			}
-		}
 		session.invalidate();
 		response.sendRedirect("Login.jsp");
 	}

@@ -83,6 +83,32 @@ public class SqlAgent {
 				res.close();
 			}
 		}
+		sqla.destroy();
 		return user;
+	}
+	
+	public int register (String username, String password) throws ClassNotFoundException, SQLException{
+		SqlAgent sqla = new SqlAgent();
+		String sql;
+		int status, errcode;
+		// check username exists
+		sql = "SELECT * FROM user WHERE username = '" + username + "';";
+		ResultSet res = sqla.executeQuery(sql);
+		// if we got an account
+		if (res.next()) {
+			errcode = 1;
+		}
+		else {
+			sql = "INSERT INTO user (username, password) VALUES ('" + username + "', '"+ password + "'); ";
+			status = sqla.executeUpdate(sql);
+			if (status == 1) {
+				errcode = 0;
+			}
+			else {
+				errcode = 2;
+			}
+		}
+		sqla.destroy();
+		return errcode;
 	}
 }
