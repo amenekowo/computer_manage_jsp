@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="bean.User"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,6 +7,13 @@
 <title>Task Search</title>
 </head>
 <body>
+<%
+//login checker
+User user = (User)session.getAttribute("user");
+if (user == null) {
+	response.sendRedirect("LoginTimeout.jsp");
+}
+%>
 <h1>欢迎来到计算机维修任务管理系统！</h1>
 <h2>请输入您需要查找的任务：</h2>
 <form action="checktask">

@@ -28,9 +28,15 @@ public class TaskSearch extends HttpServlet {
 		SqlAgent sqla = new SqlAgent();
 		ResultSet res = sqla.executeQuery(sql);
 		// type=0, user
+		out.print("<h1>欢迎来到计算机维修任务管理系统！</h1>"
+				+ "<h2>您现在的任务有：</h2>");
 		if (type == 0) {
 			// out in form
-			out.print("<table border=\"1\"><tr><td>任务名</td><td>分配的用户</td></tr>");
+			out.print("<table border=\"1\">"
+					+ "<tr>"
+					+ "<td>任务名</td>"
+					+ "<td>分配的用户</td>"
+					+ "</tr>");
 			while (res.next()) {
 				out.print("<tr>");
 				out.print("<td>");
@@ -46,7 +52,10 @@ public class TaskSearch extends HttpServlet {
 		// type=0, nouser
 		else if (type == 1) {
 			// out in form
-			out.print("<table border=\"1\"><tr><td>任务名</td></tr>");
+			out.print("<table border=\"1\">"
+					+ "<tr>"
+					+ "<td>任务名</td>"
+					+ "</tr>");
 			while (res.next()) {
 				out.print("<tr>");
 				out.print("<td>");
@@ -78,12 +87,14 @@ public class TaskSearch extends HttpServlet {
 				String searchopt = request.getParameter("searchopt");
 				String range = request.getParameter("range");
 				
-				String self = request.getParameter("self");
-				if (self.equals("1")) {
-					sql = "SELECT * FROM task WHERE user = '" + user.getUsername() + "'; ";
-					queryOut(sql, out, 1);
-					out.print("<a href=\"Main.jsp\"> <button>返回</button> </a>");
-					return;
+				if (request.getParameter("self") != null) {
+					String self = request.getParameter("self");
+					if (self.equals("1")) {
+						sql = "SELECT * FROM task WHERE user = '" + user.getUsername() + "'; ";
+						queryOut(sql, out, 1);
+						out.print("<a href=\"Main.jsp\"> <button>返回</button> </a>");
+						return;
+					}
 				}
 				
 				if (taskname != null)
@@ -117,8 +128,7 @@ public class TaskSearch extends HttpServlet {
 				out.print("<br><a href=\"Task.jsp\"> <button>返回</button> </a>");
 			}
 			else {
-				out.print("登录超时，请重新登录！");
-				out.print("<br><a href=\"logout\"> <button>返回登录</button> </a>");
+				response.sendRedirect("LoginTimeout.jsp");
 			}
 			}
 			catch (Exception e) {

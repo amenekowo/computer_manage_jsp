@@ -7,12 +7,15 @@
 <title>Show Tasks</title>
 </head>
 <body>
-<h1>欢迎来到计算机维修任务管理系统！</h1>
-<h2>您现在的任务有：</h2>
 <%
-
+//login checker
 User user = (User)session.getAttribute("user");
+if (user == null) {
+	response.sendRedirect("LoginTimeout.jsp");
+}
+%>
 
+<%
 request.getRequestDispatcher("TaskSearch?self=1").forward(request, response);
 %>
 

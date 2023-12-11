@@ -33,17 +33,20 @@ public class UpdateUser extends HttpServlet {
 		if (user.getAdmin()) {
 			String username, password;
 			String mode;
+			String sql;
 			username = request.getParameter("username");
 			password = request.getParameter("password");
 
 			// modes: add reset setadmin
 			mode = request.getParameter("opt");
-			out.print("Wow!");
 			if (mode.equals("setadmin")) {
 				// check empty
 				if (username.length() == 0 || username == null) {
 					response.sendRedirect("AdminUser.jsp?empty=2");
 					return;
+				}
+				else {
+					sql = "UPDATE user WHERE username = '" + username + "';";
 				}
 			}
 			else {
@@ -61,6 +64,7 @@ public class UpdateUser extends HttpServlet {
 			}
 		}
 		else {
+			out.print("<h1>欢迎来到计算机维修任务管理系统！</h1>");
 			out.print("你还不是管理员！<br>");
 			out.print("<a href=\"Main.jsp\"> <button>返回</button> </a>");
 		}
