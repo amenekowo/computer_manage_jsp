@@ -99,7 +99,7 @@ public class TaskSearch extends HttpServlet {
 				
 				if (taskname != null)
 					if (taskname.length() == 0)
-						response.sendRedirect("Task.jsp?empty=1");
+						response.sendRedirect("TaskSearch.jsp?empty=1");
 				
 				// distinguish type
 				if (searchopt.equals("full")) {
@@ -114,8 +114,8 @@ public class TaskSearch extends HttpServlet {
 				}
 				else if (searchopt.equals("particial")) {
 					if (range.equals("self")) {
-						sql = "SELECT * FROM task WHERE taskname LIKE '%" + taskname + "' AND user = '" + user.getUsername() + "%'; ";
-						queryOut(sql, out, 0);
+						sql = "SELECT * FROM task WHERE taskname LIKE '%" + taskname + "%' AND user = '" + user.getUsername() + "'; ";
+						queryOut(sql, out, 1);
 					}
 					else if (range.equals("all")) {
 						sql = "SELECT * FROM task WHERE taskname LIKE '%" + taskname + "%'; ";
@@ -125,7 +125,7 @@ public class TaskSearch extends HttpServlet {
 				else {
 					response.sendRedirect("Error.jsp?err=提交了不存在的规则");
 				}
-				out.print("<br><a href=\"Task.jsp\"> <button>返回</button> </a>");
+				out.print("<br><a href=\"TaskSearch.jsp\"> <button>返回</button> </a>");
 			}
 			else {
 				response.sendRedirect("LoginTimeout.jsp");

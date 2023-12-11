@@ -43,7 +43,7 @@ if (!user.getAdmin()) {
 	}
 	if (request.getParameter("success") != null) {
 		if (request.getParameter("success").equals("1"))
-			out.print("更新成功！");
+			out.print("更新成功！<br>");
 	}
 
 %>
