@@ -1,7 +1,9 @@
 package servlet;
 
 import java.io.IOException;
+
 import java.io.PrintWriter;
+import java.sql.ResultSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bean.User;
+import bean.SqlAgent;
 
 @WebServlet("/UpdateUser")
 public class UpdateUser extends HttpServlet {
@@ -36,17 +39,48 @@ public class UpdateUser extends HttpServlet {
 			String sql;
 			username = request.getParameter("username");
 			password = request.getParameter("password");
-
+			
 			// modes: add reset setadmin
 			mode = request.getParameter("opt");
-			if (mode.equals("setadmin")) {
+			if (mode.equals("setadmin") || mode.equals("deadmin")) {
 				// check empty
 				if (username.length() == 0 || username == null) {
 					response.sendRedirect("AdminUser.jsp?empty=2");
 					return;
 				}
 				else {
-					sql = "UPDATE user WHERE username = '" + username + "';";
+					if (mode.equals("setadmin")) {
+						try {
+							SqlAgent sqla = new SqlAgent();
+							int status = sqla.setAdmin(username);
+							if (status == 1) {
+								response.sendRedirect("AdminUser.jsp?success=1");
+							} else {
+								String str = "更新数据库-设置管理员-出错！";
+								response.sendRedirect("Error.jsp?err=" + str);
+							}
+						}
+						catch (Exception e) {
+							String str = e.toString();
+							response.sendRedirect("Error.jsp?err=" + str);
+						}
+					}
+					else if (mode.equals("deadmin")) {
+						try {
+							SqlAgent sqla = new SqlAgent();
+							int status = sqla.deAdmin(username);
+							if (status == 1) {
+								response.sendRedirect("AdminUser.jsp?success=1");
+							} else {
+								String str = "更新数据库-取消管理员-出错！";
+								response.sendRedirect("Error.jsp?err=" + str);
+							}
+						}
+						catch (Exception e) {
+							String str = e.toString();
+							response.sendRedirect("Error.jsp?err=" + str);
+						}
+					}
 				}
 			}
 			else {
@@ -55,11 +89,34 @@ public class UpdateUser extends HttpServlet {
 					response.sendRedirect("AdminUser.jsp?empty=1");
 					return;
 				}
-				if (mode.equals("add")) {
-					
+				try {
+					SqlAgent sqla = new SqlAgent();
+					if (mode.equals("add")) {
+						int status = sqla.register(username, password);
+						// 0 is success
+						if (status == 1) {
+							response.sendRedirect("AdminUser.jsp?success=1");
+						}
+						else {
+							String str = "更新数据库-添加用户-出错！";
+							response.sendRedirect("Error.jsp?err=" + str);
+						}
+					}
+					else if (mode.equals("reset")) {
+						int status = sqla.changePasswordAdmin(username, password);
+						if (status == 1) {
+							response.sendRedirect("AdminUser.jsp?success=1");
+						}
+						else {
+							String str = "更新数据库-重置用户密码-出错！";
+							response.sendRedirect("Error.jsp?err=" + str);
+						}
+					}
+					sqla.destroy();
 				}
-				else if (mode.equals("reset")) {
-					
+				catch (Exception e) {
+					String str = e.toString();
+					response.sendRedirect("Error.jsp?err=" + str);
 				}
 			}
 		}

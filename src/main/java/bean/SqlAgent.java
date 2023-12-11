@@ -139,4 +139,46 @@ public class SqlAgent {
 		return errcode;
 	}
 	
+	public int setAdmin(String username) throws ClassNotFoundException, SQLException {
+		SqlAgent sqla = new SqlAgent();
+		String sql;
+		sql = "UPDATE user SET isadmin = '1' WHERE username = '" + username + "';";
+		int status = sqla.executeUpdate(sql);
+		sqla.destroy();
+		return status;
+	}
+	
+	public int deAdmin(String username) throws ClassNotFoundException, SQLException {
+		SqlAgent sqla = new SqlAgent();
+		String sql;
+		sql = "UPDATE user SET isadmin = '0' WHERE username = '" + username + "';";
+		int status = sqla.executeUpdate(sql);
+		sqla.destroy();
+		return status;
+	}
+	
+	public int changePassword (String username, String old_password, String new_password) throws ClassNotFoundException, SQLException {
+		SqlAgent sqla = new SqlAgent();
+		String sql;
+		sql = "SELECT FROM user WHERE username = '" + username + "' AND password = '" + old_password + "';";
+		ResultSet res = sqla.executeQuery(sql);
+		if (res.next()) {
+			sql = "UPDATE user SET password = '" + new_password + "' WHERE username = '" + username + "';";
+			int status = sqla.executeUpdate(sql);
+			sqla.destroy();
+			return status;
+		}
+		else {
+			// if we failed to verify password
+			return -1;
+		}
+	}
+	public int changePasswordAdmin (String username, String password) throws ClassNotFoundException, SQLException {
+		SqlAgent sqla = new SqlAgent();
+		String sql;
+		sql = "UPDATE user SET password = '" + password + "' WHERE username = '" + username + "';";
+		int status = sqla.executeUpdate(sql);
+		sqla.destroy();
+		return status;
+	}
 }

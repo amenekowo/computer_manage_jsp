@@ -25,7 +25,12 @@ if (!user.getAdmin()) {
 <form action="usermod" method="post">
 用户名：<input type="text" name="username" /><br>
 密码：<input type="text" name="password" /><br>
-模式：<select name="opt"> <option value="reset">重置密码</option> <option value="add">添加用户</option> <option value="setadmin">设为管理员</option> </select> <br>
+模式：<select name="opt">
+  <option value="reset">重置密码</option>
+  <option value="add">添加用户</option>
+  <option value="setadmin">设为管理员</option>
+  <option value="deadmin">取消管理员</option>
+</select> <br>
 <input type="submit" value="提交"/>
 </form>
 <%
@@ -35,6 +40,10 @@ if (!user.getAdmin()) {
 		else if (request.getParameter("empty").equals("2"))
 				out.print("用户名不能为空，请重试！");
 			out.print("<br>");
+	}
+	if (request.getParameter("success") != null) {
+		if (request.getParameter("success").equals("1"))
+			out.print("更新成功！");
 	}
 
 %>
