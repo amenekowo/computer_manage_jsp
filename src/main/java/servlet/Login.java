@@ -62,6 +62,12 @@ public class Login extends HttpServlet {
 			if (res.next()) {
 				// set login success flag
 				session.setAttribute("authed", "yes");
+				res.close();
+				sql = "SELECT * FROM user WHERE username = '" + username + "' AND password = '" + password + "' AND isadmin = '1'; ";
+				res = sqla.executeQuery(sql);
+				if (res.next()) {
+					session.setAttribute("isAdmin", "yes");
+				}
 				// forward user to main page
 				response.sendRedirect("Main.jsp");
 			}

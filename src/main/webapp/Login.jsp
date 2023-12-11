@@ -17,7 +17,8 @@
     </style>
   </head>
   <body>
-    <h1>用户登录：</h1>
+    <h1>欢迎来到计算机维修任务管理系统！</h1>
+    <h2>用户登录：</h2>
     <form action="login" method="post">
       <label>用户名</label>
       <input type="text" name="username" /><br>

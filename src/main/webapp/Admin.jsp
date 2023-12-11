@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Main Application</title>
+<title>Admin Page</title>
 </head>
 <body>
 <%
@@ -16,16 +16,18 @@ if (authed == null || authed == "no") {
 	out.print("<br><form action=\"Login.jsp\" method=\"post\"><input type=\"submit\" value=\"返回登录\" /></form>");
 }
 else {
-	out.print("<h1>欢迎来到计算机维修任务管理系统！</h1> <h2>请选择您的操作：</h2>");
-	if (isAdmin == null) {
-		out.print("<form action=\"logout\"><input type=\"submit\" value=\"查看任务\" /></form>");
-	}
-	else {
+	if (isAdmin != null)
 		if (isAdmin == "yes") {
-			out.print("<form action=\"Admin.jsp\"><input type=\"submit\" value=\"管理员界面\" /></form>");
+			out.print("<h1>欢迎来到计算机维修任务管理系统！</h1> <h2>请选择您的操作：</h2>");
+			out.print("<form action=\"AdminMission.jsp\"><input type=\"submit\" value=\"管理任务\" /></form>");
+			out.print("<form action=\"AdminUser.jsp\"><input type=\"submit\" value=\"管理用户\" /></form>");
 		}
+		else
+			out.print("你还不是管理员！");
+	if (isAdmin == null) {
+		out.print("你还不是管理员！");
 	}
-	out.print("<form action=\"logout\"><input type=\"submit\" value=\"退出登录\" /></form>");
+	out.print("<form action=\"Main.jsp\"><input type=\"submit\" value=\"返回\" /></form>");
 }
 
 %>

@@ -17,4 +17,5 @@ public class UserParams {
 	void setPassword (String password) {
 		this.password = password;
 	}
+	
 }

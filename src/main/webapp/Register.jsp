@@ -17,14 +17,15 @@
     </style>
 </head>
 <body>
-<h1>注册用户：</h1>
-<form action="register" method="post">
+<h1>欢迎来到计算机维修任务管理系统！</h1>
+  <h2>注册用户：</h2>
+    <form action="register" method="post">
       <label>用户名</label>
       <input type="text" name="username" /><br>
       <label>密码</label>
       <input type="password" name="password" /><br>
       <input type="submit" value="注册" />
-    </form>
+    </form>	
      <%
      // if sqlagent is null, go back to login.jsp to create one
      if (session.getAttribute("SqlAgent") == null) {request.getRequestDispatcher("Login.jsp").forward(request, response);}
@@ -36,5 +37,7 @@
     	if (request.getParameter("empty").equals("1")) out.print("用户名或密码不能为空，请重试！");
     }
     %>
+    <br>
+    <a href="Login.jsp"> <button>返回登录</button> </a> 
 </body>
 </html>
