@@ -33,6 +33,11 @@ public class UpdateUser extends HttpServlet {
 		HttpSession session = request.getSession();
 		User user = (User)session.getAttribute("user");
 		
+		if (user == null) {
+			response.sendRedirect("LoginTimeout.jsp");
+			return;
+		}
+		
 		if (user.getAdmin()) {
 			String username, password;
 			String mode;
@@ -53,9 +58,12 @@ public class UpdateUser extends HttpServlet {
 						try {
 							SqlAgent sqla = new SqlAgent();
 							int status = sqla.setAdmin(username);
-							if (status == 1) {
+							if (status == 0) {
 								response.sendRedirect("AdminUser.jsp?success=1");
-							} else {
+							} else if (status == 1) {
+								response.sendRedirect("AdminUser.jsp?failed=1");
+							}
+							else {
 								String str = "更新数据库-设置管理员-出错！";
 								response.sendRedirect("Error.jsp?err=" + str);
 							}
@@ -69,8 +77,10 @@ public class UpdateUser extends HttpServlet {
 						try {
 							SqlAgent sqla = new SqlAgent();
 							int status = sqla.deAdmin(username);
-							if (status == 1) {
+							if (status == 0) {
 								response.sendRedirect("AdminUser.jsp?success=1");
+							} else if (status == 1) {
+								response.sendRedirect("AdminUser.jsp?failed=1");
 							} else {
 								String str = "更新数据库-取消管理员-出错！";
 								response.sendRedirect("Error.jsp?err=" + str);
@@ -94,7 +104,7 @@ public class UpdateUser extends HttpServlet {
 					if (mode.equals("add")) {
 						int status = sqla.register(username, password);
 						// 0 is success
-						if (status == 1) {
+						if (status == 0) {
 							response.sendRedirect("AdminUser.jsp?success=1");
 						}
 						else {
@@ -104,6 +114,7 @@ public class UpdateUser extends HttpServlet {
 					}
 					else if (mode.equals("reset")) {
 						int status = sqla.changePasswordAdmin(username, password);
+						// ret stat code, 0 is success
 						if (status == 1) {
 							response.sendRedirect("AdminUser.jsp?success=1");
 						}

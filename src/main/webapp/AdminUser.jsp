@@ -12,6 +12,7 @@
 User user = (User)session.getAttribute("user");
 if (user == null) {
 	response.sendRedirect("LoginTimeout.jsp");
+	return;
 }
 
 //admin checker
@@ -44,6 +45,10 @@ if (!user.getAdmin()) {
 	if (request.getParameter("success") != null) {
 		if (request.getParameter("success").equals("1"))
 			out.print("更新成功！<br>");
+	}
+	if (request.getParameter("failed") != null) {
+		if (request.getParameter("failed").equals("1"))
+			out.print("用户名不存在！<br>");
 	}
 
 %>

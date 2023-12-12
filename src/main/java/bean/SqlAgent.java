@@ -71,7 +71,7 @@ public class SqlAgent {
 		String sql;
 		sql = "SELECT * FROM user WHERE username = '" + username + "' AND password = '" + password + "'; ";
 		// get result
-		ResultSet res = sqla.executeQuery(sql);
+		res = sqla.executeQuery(sql);
 		if (res.next()) {
 			user.setAuthed(true);
 			res.close();
@@ -93,79 +93,137 @@ public class SqlAgent {
 	public int register (String username, String password) throws ClassNotFoundException, SQLException{
 		SqlAgent sqla = new SqlAgent();
 		String sql;
-		int status, errcode;
+		int status, update_count;
 		// check username exists
 		sql = "SELECT * FROM user WHERE username = '" + username + "';";
-		ResultSet res = sqla.executeQuery(sql);
+		res = sqla.executeQuery(sql);
 		// if we got an account
 		if (res.next()) {
-			errcode = 1;
+			status = 1;
 		}
 		else {
 			sql = "INSERT INTO user (username, password) VALUES ('" + username + "', '"+ password + "'); ";
-			status = sqla.executeUpdate(sql);
-			if (status == 1) {
-				errcode = 0;
+			update_count = sqla.executeUpdate(sql);
+			if (update_count == 1) {
+				status = 0;
 			}
 			else {
-				errcode = 2;
+				status = 2;
 			}
 		}
 		sqla.destroy();
-		return errcode;
+		return status;
 	}
 	
 	public int setTask (String taskname, String user) throws ClassNotFoundException, SQLException {
 		SqlAgent sqla = new SqlAgent();
 		String sql;
-		int status, errcode;
+		int status, update_count;
 		// check dup
 		sql = "SELECT * FROM task WHERE taskname = '" + taskname + "';";
-		ResultSet res = sqla.executeQuery(sql);
+		res = sqla.executeQuery(sql);
 		if (res.next()) {
-			errcode = 1;
+			// if exists
+			status = 1;
 		}
 		else {
 			sql = "INSERT INTO task (taskname, user) VALUES ('" + taskname + "', '"+ user + "'); ";
-			status = sqla.executeUpdate(sql);
-			if (status == 1) {
-				errcode = 0;
+			update_count = sqla.executeUpdate(sql);
+			if (update_count == 1) {
+				status = 0;
 			}
 			else {
-				errcode = 2;
+				status = 2;
 			}
 		}
-		sqla.destroy();
-		return errcode;
-	}
-	
-	public int setAdmin(String username) throws ClassNotFoundException, SQLException {
-		SqlAgent sqla = new SqlAgent();
-		String sql;
-		sql = "UPDATE user SET isadmin = '1' WHERE username = '" + username + "';";
-		int status = sqla.executeUpdate(sql);
 		sqla.destroy();
 		return status;
 	}
 	
-	public int deAdmin(String username) throws ClassNotFoundException, SQLException {
+	public int delTask (String taskname) throws ClassNotFoundException, SQLException {
+		// 0: success 1: no task 2: error in update
 		SqlAgent sqla = new SqlAgent();
 		String sql;
-		sql = "UPDATE user SET isadmin = '0' WHERE username = '" + username + "';";
-		int status = sqla.executeUpdate(sql);
+		int status, update_count;
+		// check dup
+		sql = "SELECT * FROM task WHERE taskname = '" + taskname + "';";
+		res = sqla.executeQuery(sql);
+		if (res.next()) {
+			sql = "DELETE FROM task WHERE taskname = '" + taskname + "'; ";
+			update_count = sqla.executeUpdate(sql);
+			if (update_count == 1) {
+				status = 0;
+			}
+			else {
+				// multiple items
+				status = 2;
+			}
+		}
+		else {
+			status = 1;
+		}
 		sqla.destroy();
+		return status;
+	}
+	
+	public int setAdmin(String username) throws ClassNotFoundException, SQLException {
+		// 0: success 1: no user 2: error in update
+		SqlAgent sqla = new SqlAgent();
+		String sql;
+		int status;
+		sql = "SELECT * FROM user WHERE username = '" + username + "';";
+		res = sqla.executeQuery(sql);
+		if (res.next()) {
+			sql = "UPDATE user SET isadmin = '1' WHERE username = '" + username + "';";
+			int update_count = sqla.executeUpdate(sql);
+			sqla.destroy();
+			if (update_count == 1) {
+				status = 0;
+			} else {
+				status = 2;
+			}
+		}
+		else {
+			status = 1;
+		}
+		return status;
+	}
+	
+	public int deAdmin(String username) throws ClassNotFoundException, SQLException {
+		// 0: success 1: no user 2: error in update
+		SqlAgent sqla = new SqlAgent();
+		String sql;
+		int status;
+		sql = "SELECT * FROM user WHERE username = '" + username + "';";
+		res = sqla.executeQuery(sql);
+		if (res.next()) {
+			sql = "UPDATE user SET isadmin = '0' WHERE username = '" + username + "';";
+			int update_count = sqla.executeUpdate(sql);
+			sqla.destroy();
+			if (update_count == 1)
+				status = 0;
+			else
+				status = 2;
+		} else {
+			status = 1;
+		}
 		return status;
 	}
 	
 	public int changePassword (String username, String old_password, String new_password) throws ClassNotFoundException, SQLException {
 		SqlAgent sqla = new SqlAgent();
 		String sql;
+		int status;
 		sql = "SELECT FROM user WHERE username = '" + username + "' AND password = '" + old_password + "';";
-		ResultSet res = sqla.executeQuery(sql);
+		res = sqla.executeQuery(sql);
 		if (res.next()) {
 			sql = "UPDATE user SET password = '" + new_password + "' WHERE username = '" + username + "';";
-			int status = sqla.executeUpdate(sql);
+			int update_count = sqla.executeUpdate(sql);
 			sqla.destroy();
+			if (update_count == 1) 
+				status = 0;
+			else
+				status = 1;
 			return status;
 		}
 		else {
@@ -176,9 +234,15 @@ public class SqlAgent {
 	public int changePasswordAdmin (String username, String password) throws ClassNotFoundException, SQLException {
 		SqlAgent sqla = new SqlAgent();
 		String sql;
+		int status;
 		sql = "UPDATE user SET password = '" + password + "' WHERE username = '" + username + "';";
-		int status = sqla.executeUpdate(sql);
+		int update_count = sqla.executeUpdate(sql);
 		sqla.destroy();
+		if (update_count == 1) {
+			status = 0;
+		}
+		else 
+			status = 1;
 		return status;
 	}
 }

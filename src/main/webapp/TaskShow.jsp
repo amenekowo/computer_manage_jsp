@@ -12,6 +12,7 @@
 User user = (User)session.getAttribute("user");
 if (user == null) {
 	response.sendRedirect("LoginTimeout.jsp");
+	return;
 }
 %>
 

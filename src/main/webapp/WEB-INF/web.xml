@@ -31,6 +31,10 @@
     <servlet-name>UserAdmin</servlet-name>
     <servlet-class>servlet.UpdateUser</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>TaskAdmin</servlet-name>
+    <servlet-class>servlet.UpdateTask</servlet-class>
+  </servlet>
   
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
@@ -51,6 +55,10 @@
   <servlet-mapping>
     <servlet-name>UserAdmin</servlet-name>
     <url-pattern>/usermod</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>TaskAdmin</servlet-name>
+    <url-pattern>/taskmod</url-pattern>
   </servlet-mapping>
   
 </web-app>

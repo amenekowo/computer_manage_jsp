@@ -12,6 +12,7 @@
 User user = (User)session.getAttribute("user");
 if (user == null) {
 	response.sendRedirect("LoginTimeout.jsp");
+	return;
 }
 %>
 <h1>欢迎来到计算机维修任务管理系统！</h1>
@@ -37,9 +38,5 @@ if (request.getParameter("empty") != null) {
 %>
 <br>
 <a href="Main.jsp"> <button>返回</button> </a>
-
-<br>
-注:任务名为空则为查找全部
-
 </body>
 </html>

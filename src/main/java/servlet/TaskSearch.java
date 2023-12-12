@@ -81,59 +81,56 @@ public class TaskSearch extends HttpServlet {
 			
 			User user = (User)session.getAttribute("user");
 			
-			if (user != null) {
-				String sql = "";
-				String taskname = request.getParameter("taskname");
-				String searchopt = request.getParameter("searchopt");
-				String range = request.getParameter("range");
-				
-				if (request.getParameter("self") != null) {
-					String self = request.getParameter("self");
-					if (self.equals("1")) {
-						sql = "SELECT * FROM task WHERE user = '" + user.getUsername() + "'; ";
-						queryOut(sql, out, 1);
-						out.print("<a href=\"Main.jsp\"> <button>返回</button> </a>");
-						return;
-					}
-				}
-				
-				if (taskname != null)
-					if (taskname.length() == 0)
-						response.sendRedirect("TaskSearch.jsp?empty=1");
-				
-				// distinguish type
-				if (searchopt.equals("full")) {
-					if (range.equals("self")) {
-						sql = "SELECT * FROM task WHERE taskname = '" + taskname + "' AND user = '" + user.getUsername() + "'; ";
-						queryOut(sql, out, 0);
-					}
-					else if (range.equals("all")) {
-						sql = "SELECT * FROM task WHERE taskname = '" + taskname + "'; ";
-						queryOut(sql, out, 0);
-					}
-				}
-				else if (searchopt.equals("particial")) {
-					if (range.equals("self")) {
-						sql = "SELECT * FROM task WHERE taskname LIKE '%" + taskname + "%' AND user = '" + user.getUsername() + "'; ";
-						queryOut(sql, out, 1);
-					}
-					else if (range.equals("all")) {
-						sql = "SELECT * FROM task WHERE taskname LIKE '%" + taskname + "%'; ";
-						queryOut(sql, out, 0);
-					}
-				}
-				else {
-					response.sendRedirect("Error.jsp?err=提交了不存在的规则");
-				}
-				out.print("<br><a href=\"TaskSearch.jsp\"> <button>返回</button> </a>");
-			}
-			else {
+			if (user == null) {
 				response.sendRedirect("LoginTimeout.jsp");
+				return;
 			}
+
+			String sql = "";
+			String taskname = request.getParameter("taskname");
+			String searchopt = request.getParameter("searchopt");
+			String range = request.getParameter("range");
+
+			if (request.getParameter("self") != null) {
+				String self = request.getParameter("self");
+				if (self.equals("1")) {
+					sql = "SELECT * FROM task WHERE user = '" + user.getUsername() + "'; ";
+					queryOut(sql, out, 1);
+					out.print("<a href=\"Main.jsp\"> <button>返回</button> </a>");
+					return;
+				}
 			}
-			catch (Exception e) {
-				response.sendRedirect("Error.jsp?err=" + e.toString());
+
+			if (taskname != null)
+				if (taskname.length() == 0)
+					response.sendRedirect("TaskSearch.jsp?empty=1");
+
+			// distinguish type
+			if (searchopt.equals("full")) {
+				if (range.equals("self")) {
+					sql = "SELECT * FROM task WHERE taskname = '" + taskname + "' AND user = '" + user.getUsername()
+							+ "'; ";
+					queryOut(sql, out, 0);
+				} else if (range.equals("all")) {
+					sql = "SELECT * FROM task WHERE taskname = '" + taskname + "'; ";
+					queryOut(sql, out, 0);
+				}
+			} else if (searchopt.equals("particial")) {
+				if (range.equals("self")) {
+					sql = "SELECT * FROM task WHERE taskname LIKE '%" + taskname + "%' AND user = '"
+							+ user.getUsername() + "'; ";
+					queryOut(sql, out, 1);
+				} else if (range.equals("all")) {
+					sql = "SELECT * FROM task WHERE taskname LIKE '%" + taskname + "%'; ";
+					queryOut(sql, out, 0);
+				}
+			} else {
+				response.sendRedirect("Error.jsp?err=提交了不存在的规则");
 			}
+			out.print("<br><a href=\"TaskSearch.jsp\"> <button>返回</button> </a>");
+		} catch (Exception e) {
+			response.sendRedirect("Error.jsp?err=" + e.toString());
+		}
 			
 			
 	}
