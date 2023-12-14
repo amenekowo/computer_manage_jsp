@@ -41,7 +41,6 @@ public class UpdateUser extends HttpServlet {
 		if (user.getAdmin()) {
 			String username, password;
 			String mode;
-			String sql;
 			username = request.getParameter("username");
 			password = request.getParameter("password");
 			
@@ -56,8 +55,7 @@ public class UpdateUser extends HttpServlet {
 				else {
 					if (mode.equals("setadmin")) {
 						try {
-							SqlAgent sqla = new SqlAgent();
-							int status = sqla.setAdmin(username);
+							int status = User.setAdmin(username);
 							if (status == 0) {
 								response.sendRedirect("AdminUser.jsp?success=1");
 							} else if (status == 1) {
@@ -75,8 +73,7 @@ public class UpdateUser extends HttpServlet {
 					}
 					else if (mode.equals("deadmin")) {
 						try {
-							SqlAgent sqla = new SqlAgent();
-							int status = sqla.deAdmin(username);
+							int status = User.deAdmin(username);
 							if (status == 0) {
 								response.sendRedirect("AdminUser.jsp?success=1");
 							} else if (status == 1) {
@@ -100,9 +97,8 @@ public class UpdateUser extends HttpServlet {
 					return;
 				}
 				try {
-					SqlAgent sqla = new SqlAgent();
 					if (mode.equals("add")) {
-						int status = sqla.register(username, password);
+						int status = User.register(username, password);
 						// 0 is success
 						if (status == 0) {
 							response.sendRedirect("AdminUser.jsp?success=1");
@@ -113,7 +109,7 @@ public class UpdateUser extends HttpServlet {
 						}
 					}
 					else if (mode.equals("reset")) {
-						int status = sqla.changePasswordAdmin(username, password);
+						int status = User.changePasswordAdmin(username, password);
 						// ret stat code, 0 is success
 						if (status == 1) {
 							response.sendRedirect("AdminUser.jsp?success=1");
@@ -123,7 +119,6 @@ public class UpdateUser extends HttpServlet {
 							response.sendRedirect("Error.jsp?err=" + str);
 						}
 					}
-					sqla.destroy();
 				}
 				catch (Exception e) {
 					String str = e.toString();

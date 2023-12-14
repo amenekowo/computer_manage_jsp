@@ -27,10 +27,6 @@
       <input type="submit" value="登录" />
     </form>
     <%
-    // move sqlagent init to login.jsp to avoid everytime reuse of it
-    if (session.getAttribute("SqlAgent") == null) {
-		
-	}
     if (request.getParameter("failed") != null) {
     	if (request.getParameter("failed").equals("1")) out.print("用户名或密码输入错误，请重试！");
     }

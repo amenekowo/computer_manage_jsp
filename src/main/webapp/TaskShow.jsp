@@ -15,10 +15,9 @@ if (user == null) {
 	return;
 }
 %>
-
-<%
-request.getRequestDispatcher("TaskSearch?self=1").forward(request, response);
-%>
-
+<h1>欢迎来到计算机维修任务管理系统！</h1>
+<h2>您现在的任务有：</h2>
+<jsp:include page="TaskListSelf.jsp" />
+<a href="Main.jsp"> <button>返回</button> </a>
 </body>
 </html>

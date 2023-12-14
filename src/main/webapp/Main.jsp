@@ -7,10 +7,10 @@
 <title>Main Application</title>
 </head>
 <body>
-<jsp:useBean id="user" class="bean.User" scope="session" />
 <%
 //login checker
-//User user = (User)session.getAttribute("user");
+// <jsp:useBean id="user" class="bean.User" scope="session"/>
+User user = (User)session.getAttribute("user");
 if (user == null) {
 	response.sendRedirect("LoginTimeout.jsp");	
 	return;

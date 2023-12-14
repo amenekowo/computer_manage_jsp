@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import bean.SqlAgent;
+import bean.User;
 
 @WebServlet("/Register")
 public class Register extends HttpServlet {
@@ -27,11 +28,6 @@ public class Register extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		
-		// get jsp thiny
-		PrintWriter out = response.getWriter();
-		HttpSession session = request.getSession();
-		
-		
 		// now we get params from request
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
@@ -44,8 +40,7 @@ public class Register extends HttpServlet {
 		}
 		
 		try {
-			SqlAgent sqla = new SqlAgent();
-			int stat = sqla.register(username, password);
+			int stat = User.register(username, password);
 			if (stat == 0) {
 				response.sendRedirect("Login.jsp?regnew=1");
 			}

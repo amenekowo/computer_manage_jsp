@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import bean.SqlAgent;
 import bean.User;
+import bean.Task;
 
 @WebServlet("/UpdateTask")
 public class UpdateTask extends HttpServlet {
@@ -50,11 +52,12 @@ public class UpdateTask extends HttpServlet {
 				return;
 			}
 
+			Task task = null;
+			
 			try {
 				if (mode.equals("add")) {
-					SqlAgent sqla = new SqlAgent();
-					int status = sqla.setTask(taskname, username);
-					sqla.destroy();
+					task = new Task(taskname, username);
+					int status = Task.setTask(task);
 					if (status == 0) {
 						response.sendRedirect("AdminTask.jsp?success=1");
 					} else if (status == 1) {
@@ -64,9 +67,8 @@ public class UpdateTask extends HttpServlet {
 						response.sendRedirect("Error.jsp?err=" + str);
 					}
 				} else if (mode.equals("del")) {
-					SqlAgent sqla = new SqlAgent();
-					int status = sqla.delTask(taskname);
-					sqla.destroy();
+					task = new Task(taskname);
+					int status = Task.delTask(task);
 					if (status == 0) {
 						response.sendRedirect("AdminTask.jsp?success=1");
 					} else if (status == 1) {

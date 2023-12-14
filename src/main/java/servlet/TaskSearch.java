@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,8 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.mysql.cj.util.SearchMode;
+
 import bean.SqlAgent;
 import bean.User;
+import bean.Task;
 
 @WebServlet("/TaskSearch")
 public class TaskSearch extends HttpServlet {
@@ -24,52 +28,6 @@ public class TaskSearch extends HttpServlet {
 		super();
 	}
 
-	protected void queryOut(String sql, PrintWriter out, int type) throws SQLException, ClassNotFoundException {
-		SqlAgent sqla = new SqlAgent();
-		ResultSet res = sqla.executeQuery(sql);
-		// type=0, user
-		out.print("<h1>欢迎来到计算机维修任务管理系统！</h1>"
-				+ "<h2>您现在的任务有：</h2>");
-		if (type == 0) {
-			// out in form
-			out.print("<table border=\"1\">"
-					+ "<tr>"
-					+ "<td>任务名</td>"
-					+ "<td>分配的用户</td>"
-					+ "</tr>");
-			while (res.next()) {
-				out.print("<tr>");
-				out.print("<td>");
-				out.print(res.getString("taskname"));
-				out.print("</td>");
-				out.print("<td>");
-				out.print(res.getString("user"));
-				out.print("</td>");
-				out.print("</tr>");
-			}
-			out.print("</table>");
-		}
-		// type=0, nouser
-		else if (type == 1) {
-			// out in form
-			out.print("<table border=\"1\">"
-					+ "<tr>"
-					+ "<td>任务名</td>"
-					+ "</tr>");
-			while (res.next()) {
-				out.print("<tr>");
-				out.print("<td>");
-				out.print(res.getString("taskname"));
-				out.print("</td>");
-				out.print("</tr>");
-			}
-			out.print("</table>");
-		}
-		// close connection
-		res.close();
-		sqla.destroy();
-
-	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			// set character encoding
@@ -86,48 +44,57 @@ public class TaskSearch extends HttpServlet {
 				return;
 			}
 
-			String sql = "";
 			String taskname = request.getParameter("taskname");
-			String searchopt = request.getParameter("searchopt");
+			String mode = request.getParameter("mode");
 			String range = request.getParameter("range");
-
-			if (request.getParameter("self") != null) {
-				String self = request.getParameter("self");
-				if (self.equals("1")) {
-					sql = "SELECT * FROM task WHERE user = '" + user.getUsername() + "'; ";
-					queryOut(sql, out, 1);
-					out.print("<a href=\"Main.jsp\"> <button>返回</button> </a>");
+			
+			// check name empty
+			if (taskname != null)
+				if (taskname.length() == 0) {
+					response.sendRedirect("TaskSearch.jsp?empty=1");
 					return;
 				}
+			
+			// search mode:
+			// mode[0]: range 1: self 2:all
+			// mode[1]: mode 1: full 2:particial
+			
+			if (request.getParameter("self") != null && request.getParameter("self").equals("1")) {
+				Task.taskList(user, out);
+				return;
 			}
 
-			if (taskname != null)
-				if (taskname.length() == 0)
-					response.sendRedirect("TaskSearch.jsp?empty=1");
-
-			// distinguish type
-			if (searchopt.equals("full")) {
-				if (range.equals("self")) {
-					sql = "SELECT * FROM task WHERE taskname = '" + taskname + "' AND user = '" + user.getUsername()
-							+ "'; ";
-					queryOut(sql, out, 0);
-				} else if (range.equals("all")) {
-					sql = "SELECT * FROM task WHERE taskname = '" + taskname + "'; ";
-					queryOut(sql, out, 0);
-				}
-			} else if (searchopt.equals("particial")) {
-				if (range.equals("self")) {
-					sql = "SELECT * FROM task WHERE taskname LIKE '%" + taskname + "%' AND user = '"
-							+ user.getUsername() + "'; ";
-					queryOut(sql, out, 1);
-				} else if (range.equals("all")) {
-					sql = "SELECT * FROM task WHERE taskname LIKE '%" + taskname + "%'; ";
-					queryOut(sql, out, 0);
-				}
-			} else {
-				response.sendRedirect("Error.jsp?err=提交了不存在的规则");
+			String mode_out_string = "搜索模式: ";
+			int[] query_mode = new int[2];
+			if (mode.equals("full")) {
+				query_mode[0] = 1;
+				mode_out_string += "精确匹配";
 			}
-			out.print("<br><a href=\"TaskSearch.jsp\"> <button>返回</button> </a>");
+			else if (mode.equals("particial")) {
+				query_mode[0] = 2;
+				mode_out_string += "模糊匹配";
+			}
+			mode_out_string += ", ";
+			if (range.equals("self")) {
+				query_mode[1] = 1;
+				mode_out_string += "自己";
+			}
+			else if (range.equals("all")) {
+				query_mode[1] = 2;
+				mode_out_string += "全部";
+			}
+			
+			out.print(mode_out_string);
+			out.print("<br>");
+			out.print("搜索“" + taskname + "”的结果：");
+			
+			Task task = new Task(taskname, user.getUsername());
+			if (!Task.taskSearch(task, query_mode, out)) {
+				String str = "查询出错！";
+				response.sendRedirect("Error.jsp?err=" + str);
+			}
+			return;
+			
 		} catch (Exception e) {
 			response.sendRedirect("Error.jsp?err=" + e.toString());
 		}

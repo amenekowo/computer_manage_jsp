@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+ <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="bean.User"%>
 <!DOCTYPE html>
 <html>
@@ -20,7 +20,7 @@ if (user == null) {
 <form action="checktask">
 任务名<input type="text" name="taskname" /> <br>
 查找方式
-<select name="searchopt">
+<select name="mode">
 	<option value="full">精确匹配
 	<option value="particial">模糊匹配
 </select> <br>

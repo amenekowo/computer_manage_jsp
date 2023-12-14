@@ -54,12 +54,13 @@ public class Login extends HttpServlet {
 		
 		try {
 			SqlAgent sqla = new SqlAgent();
-			User user = sqla.login(username, password);
+			User user = User.login(username, password);
 			if (user != null) {
 				session.setAttribute("user", user);
 				response.sendRedirect("Main.jsp");
 			}
 			else {
+				session.setAttribute("user", null);
 				response.sendRedirect("Login.jsp?failed=1");
 			}
 		}
