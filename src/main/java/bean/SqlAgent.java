@@ -1,8 +1,6 @@
 package bean;
 
-import java.io.PrintWriter;
 import java.sql.*;
-import bean.User;
 
 public class SqlAgent {
 	Connection conn = null;

@@ -2,9 +2,6 @@ package servlet;
 
 import java.io.IOException;
 
-import java.io.PrintWriter;
-import java.sql.*;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import bean.SqlAgent;
 import bean.User;
 
 /**
@@ -39,7 +35,6 @@ public class Login extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		
 		// get jsp thingys
-		PrintWriter out = response.getWriter();
 		HttpSession session = request.getSession();
 		
 		
@@ -53,7 +48,6 @@ public class Login extends HttpServlet {
 		}
 		
 		try {
-			SqlAgent sqla = new SqlAgent();
 			User user = User.login(username, password);
 			if (user != null) {
 				session.setAttribute("user", user);

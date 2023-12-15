@@ -1,10 +1,7 @@
 package servlet;
 
 import java.io.IOException;
-
 import java.io.PrintWriter;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,9 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.mysql.cj.util.SearchMode;
 
-import bean.SqlAgent;
 import bean.User;
 import bean.Task;
 
@@ -90,7 +85,7 @@ public class TaskSearch extends HttpServlet {
 			
 			Task task = new Task(taskname, user.getUsername());
 			if (!Task.taskSearch(task, query_mode, out)) {
-				String str = "查询出错！";
+				String str = "查询任务出错！";
 				response.sendRedirect("Error.jsp?err=" + str);
 			}
 			return;
