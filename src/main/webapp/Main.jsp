@@ -25,7 +25,7 @@ if (user.getAdmin()) {
 	out.print("<a href=\"Admin.jsp\"> <button>管理员界面</button> </a>");
 }
 %>
-<a href="TaskShow.jsp"> <button>查看任务</button> </a>
+<a href="TaskSearch.jsp?selflist=1"> <button>查看任务</button> </a>
 <a href="TaskSearch.jsp"> <button>搜索任务</button> </a>
 <a href="logout"> <button>退出登录</button> </a>
 </body>

@@ -15,6 +15,14 @@ if (user == null) {
 	return;
 }
 %>
+<%
+
+if (request.getParameter("selflist") != null && 
+	request.getParameter("selflist").equals("1")) {
+	response.sendRedirect("checktask?selflist=1");
+}
+
+%>
 <h1>欢迎来到计算机维修任务管理系统！</h1>
 <h2>请输入您需要查找的任务：</h2>
 <form action="checktask">
