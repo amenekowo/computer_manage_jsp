@@ -1,7 +1,6 @@
 package bean;
 
 import java.sql.SQLException;
-import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
